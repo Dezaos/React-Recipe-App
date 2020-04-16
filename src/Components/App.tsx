@@ -7,14 +7,13 @@ import RecipeApiClient from "../RestApis/RecipeApiClient";
 
 function App() {
   const { theme } = useContext(RootThemeContext);
+  console.log(theme.palette.secondary.main);
 
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Header />
-        <Body />
-      </ThemeProvider>
+      <CssBaseline />
+      <Header />
+      <Body />
     </div>
   );
 }

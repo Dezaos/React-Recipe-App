@@ -9,26 +9,25 @@ const createTypeTheme = (darkmode: boolean, oldTheme: Theme): Theme => {
   return createMuiTheme({
     ...oldTheme,
     palette: {
-      type: darkmode ? "dark" : "light"
-    }
+      type: darkmode ? "dark" : "light",
+    },
   });
 };
 
 const DarkThemeSwitch: React.FC = () => {
-  const { theme, setTheme } = useContext(RootThemeContext);
-  const startValue = useRef(theme.palette.type === "dark");
+  const { darkMode, setDarkMode } = useContext(RootThemeContext);
 
   return (
     <div>
       <TriggerCheckBox
         icon={<NightsStayOutlinedIcon />}
         checkedIcon={<NightsStayIcon />}
-        startValue={startValue.current}
+        startValue={darkMode}
         onFunction={() => {
-          setTheme(createTypeTheme(true, theme));
+          setDarkMode(true);
         }}
         offFunction={() => {
-          setTheme(createTypeTheme(false, theme));
+          setDarkMode(false);
         }}
       />
     </div>

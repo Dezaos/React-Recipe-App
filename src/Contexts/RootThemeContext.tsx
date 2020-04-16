@@ -1,32 +1,45 @@
 import React, { Props, useState } from "react";
-import { createMuiTheme, Theme } from "@material-ui/core/styles";
+import { Theme, createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { blue, deepOrange } from "@material-ui/core/colors";
 
 interface RootThemeContextProps {
   theme: Theme;
-  setTheme: (theme: Theme) => void;
+  darkMode: boolean;
+  setDarkMode: (value: boolean) => void;
 }
 
-const defaultTheme: Theme = createMuiTheme({
-  palette: {
-    type: "dark",
-  },
-});
+const createTheme = (darkMode: boolean) => {
+  return createMuiTheme({
+    palette: {
+      type: darkMode ? "dark" : "light",
+      primary: blue,
+      secondary: deepOrange,
+    },
+  });
+};
 
 export const RootThemeContext = React.createContext<RootThemeContextProps>({
-  theme: defaultTheme,
-  setTheme: () => {},
+  theme: createTheme(true),
+  darkMode: true,
+  setDarkMode: () => {},
 });
 
 export const RootThemeProvider = ({ children }: Props<React.FC>) => {
-  const [theme, setTheme] = useState(defaultTheme);
+  const [theme, setTheme] = useState(createTheme(true));
+  const [darkMode, setDarkMode] = useState(true);
+  console.log(theme.palette.type);
   return (
     <RootThemeContext.Provider
       value={{
-        theme,
-        setTheme,
+        theme: theme,
+        darkMode: darkMode,
+        setDarkMode: (value: boolean) => {
+          setTheme(createTheme(value));
+          setDarkMode(value);
+        },
       }}
     >
-      {children}
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </RootThemeContext.Provider>
   );
 };
