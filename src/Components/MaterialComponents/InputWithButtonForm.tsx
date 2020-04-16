@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Input, InputProps, ButtonProps, Button } from "@material-ui/core";
+import {
+  Input,
+  InputProps,
+  ButtonProps,
+  Button,
+  makeStyles,
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
 interface InputWithButtonFormProps {
@@ -9,6 +15,15 @@ interface InputWithButtonFormProps {
   buttonFormProps?: ButtonProps;
 }
 
+const useStyles = makeStyles({
+  form: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    flexShrink: 1,
+  },
+});
+
 const InputWithButtonForm: React.FC<InputWithButtonFormProps> = ({
   onSubmit,
   buttonIcon,
@@ -16,8 +31,10 @@ const InputWithButtonForm: React.FC<InputWithButtonFormProps> = ({
   buttonFormProps,
 }) => {
   const [formValue, setFormValue] = useState("");
+  const classes = useStyles();
   return (
     <form
+      className={classes.form}
       onSubmit={(event) => {
         onSubmit(event, formValue);
         setFormValue("");

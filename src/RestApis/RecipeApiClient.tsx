@@ -1,4 +1,3 @@
-import React from "react";
 import IRecipeApi from "../Interfaces/IRecipeAPi";
 import IRecipeRequest from "../Types/IRecipeRequest";
 import testData from "../testData.json";
@@ -24,17 +23,26 @@ class RecipeApiClient implements IRecipeApi {
     return `${GET_ENDPOINT}?q=chicken&app_id=${APP_ID}&app_key=${APP_KEY}`;
   };
 
-  getRecipe = (request: IRecipeRequest) => {
-    // return fetch(this.generateEndpoint(request)).then((response) => {
-    //   if (!response.ok) throw new Error(response.statusText);
-    //   return response.json();
-    // });
+  getTestRecipes = () => {
     return new Promise<any>((resolve, reject) => {
       resolve(this.convertData(testData as SearchResult));
     });
   };
+
+  getRecipe = (request: IRecipeRequest) => {
+    return fetch(this.generateEndpoint(request)).then((response) => {
+      if (!response.ok) throw new Error(response.statusText);
+      return response.json();
+    });
+  };
   getRecipes = (request: IRecipeRequest, maxResult?: Number) => {
-    return [];
+    return fetch(this.generateEndpoint(request)).then((response) => {
+      if (!response.ok) throw new Error(response.statusText);
+      return response.json().then((data) => {
+        if (!response.ok) throw new Error(response.statusText);
+        return this.convertData(data);
+      });
+    });
   };
 }
 

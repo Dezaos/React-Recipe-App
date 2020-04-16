@@ -27,7 +27,6 @@ export const RootThemeContext = React.createContext<RootThemeContextProps>({
 export const RootThemeProvider = ({ children }: Props<React.FC>) => {
   const [theme, setTheme] = useState(createTheme(true));
   const [darkMode, setDarkMode] = useState(true);
-  console.log(theme.palette.type);
   return (
     <RootThemeContext.Provider
       value={{

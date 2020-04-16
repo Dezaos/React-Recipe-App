@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  GridList,
-  GridListTile,
-  useMediaQuery,
-  useTheme,
-  makeStyles,
-} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import IRecipe from "../Types/IRecipe";
 import RecipeListElement from "./RecipeListElement";
 
@@ -15,9 +9,13 @@ interface RecipeGridProps {
 
 const useStyles = makeStyles({
   list: {
-    display: "flex",
-    flexWrap: "wrap",
+    display: "grid",
+    width: "100%",
+    gridTemplateColumns: `repeat(auto-fill,250px)`,
     justifyContent: "center",
+    padding: "10px 20px 10px",
+    gridColumnGap: 10,
+    gridRowGap: 10,
   },
 });
 
@@ -28,6 +26,7 @@ const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes }) => {
     <div className={classes.list}>
       {recipes.map((recipe) => (
         <RecipeListElement
+          key={recipe.authorLink}
           author={recipe.author}
           authorLink={recipe.authorLink}
           image={recipe.image}

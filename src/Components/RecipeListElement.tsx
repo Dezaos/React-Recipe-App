@@ -4,7 +4,6 @@ import {
   Card,
   makeStyles,
   CardContent,
-  Link,
   CardActionArea,
 } from "@material-ui/core";
 
@@ -16,15 +15,34 @@ interface RecipeListElementProps {
 }
 
 const useStyles = makeStyles({
-  root: { width: 350, height: 350, margin: 10 },
   card: {
     display: "flex",
     flexDirection: "column",
-    width: "100%",
+    width: 250,
+  },
+  cardActionArea: {
+    display: "flex",
+    alignItems: "stretch",
+    flexDirection: "column",
+    height: "100%",
+  },
+  cardContent: {
+    flexGrow: 1,
   },
   media: {
-    height: 180,
-    paddingTop: "56.25%", //16:9,
+    height: 200,
+    width: "100%",
+  },
+  title: {
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    display: "block",
+    fontSize: 14,
+  },
+  authorText: {
+    margin: 0,
+    fontSize: 11,
   },
 });
 
@@ -37,21 +55,20 @@ const RecipeListElement: React.FC<RecipeListElementProps> = ({
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Card className={classes.card}>
-        <CardActionArea
-          onClick={() => {
-            window.location.href = authorLink;
-          }}
-        >
-          <CardMedia image={image} className={classes.media} />
-          <CardContent>
-            <strong style={{ fontSize: 20 }}>{title}</strong>
-            <p style={{ margin: 0 }}>By: {author}</p>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </div>
+    <Card className={classes.card}>
+      <CardActionArea
+        className={classes.cardActionArea}
+        onClick={() => {
+          window.location.href = authorLink;
+        }}
+      >
+        <CardMedia image={image} className={classes.media} />
+        <CardContent className={classes.cardContent}>
+          <strong className={classes.title}>{title}</strong>
+          <p className={classes.authorText}>By: {author}</p>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 };
 

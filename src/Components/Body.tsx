@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
-import InputWithButtonForm from "./MaterialComponents/InputWithButtonForm";
 import RecipeSeacrh from "./RecipeSearch";
-import RecipeListElement from "./RecipeListElement";
-import bbb from "../bbb.png";
 import RecipeApiClient from "../RestApis/RecipeApiClient";
 import RecipeGrid from "./RecipeGrid";
 import IRecipe from "../Types/IRecipe";
+import { SearchResult } from "../RestApis/IEdamamRecipeData";
 
 const useStyles = makeStyles({
   body: {
@@ -21,15 +19,20 @@ const Body = () => {
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
   const api = new RecipeApiClient();
 
+  const onSearch = (
+    event: React.FormEvent<HTMLFormElement>,
+    value: string
+  ) => {};
+
   useEffect(() => {
-    api.getRecipe({}).then((data) => {
+    api.getRecipes({}).then((data) => {
       setRecipes(data);
     });
   }, []);
 
   return (
     <main className={classes.body}>
-      <RecipeSeacrh />
+      <RecipeSeacrh onSearch={onSearch} />
       <RecipeGrid recipes={recipes} />
     </main>
   );
