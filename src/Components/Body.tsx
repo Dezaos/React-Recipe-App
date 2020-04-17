@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import RecipeSeacrh from "./RecipeSearch";
-import RecipeApiClient from "../RestApis/RecipeApiClient";
 import RecipeGrid from "./RecipeGrid";
 import IRecipe from "../Types/IRecipe";
-import { SearchResult } from "../RestApis/IEdamamRecipeData";
 
 const useStyles = makeStyles({
   body: {
@@ -14,25 +12,22 @@ const useStyles = makeStyles({
   },
 });
 
+const onSearch = (value: IRecipe[], setRecipes: React.Dispatch<IRecipe[]>) => {
+  if (!value || value.length === 0) return;
+  setRecipes(value);
+};
+
 const Body = () => {
   const classes = useStyles();
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
-  const api = new RecipeApiClient();
-
-  const onSearch = (
-    event: React.FormEvent<HTMLFormElement>,
-    value: string
-  ) => {};
-
-  useEffect(() => {
-    api.getRecipes({}).then((data) => {
-      setRecipes(data);
-    });
-  }, []);
 
   return (
     <main className={classes.body}>
-      <RecipeSeacrh onSearch={onSearch} />
+      <RecipeSeacrh
+        onSearch={(recipes) => {
+          onSearch(recipes, setRecipes);
+        }}
+      />
       <RecipeGrid recipes={recipes} />
     </main>
   );

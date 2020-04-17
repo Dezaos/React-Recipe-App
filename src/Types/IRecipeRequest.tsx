@@ -1,8 +1,9 @@
 import React from "react";
 
 interface IRecipeRequest {
-  name?: string;
+  search?: string;
   ingredients?: string[];
+  maxResult?: Number;
 }
 
 export default IRecipeRequest;

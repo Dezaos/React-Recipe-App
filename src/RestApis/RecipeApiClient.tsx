@@ -7,6 +7,7 @@ import { SearchResult } from "./IEdamamRecipeData";
 const GET_ENDPOINT = "https://api.edamam.com/search";
 const APP_ID = "377ebc8b";
 const APP_KEY = "8df2e7244d7bc2590fcde4a21098e3b7";
+const DEFAULT_Max_SEARCH_RESULT = 50;
 
 class RecipeApiClient implements IRecipeApi {
   convertData = (data: SearchResult): IRecipe[] => {
@@ -20,7 +21,10 @@ class RecipeApiClient implements IRecipeApi {
   };
 
   generateEndpoint = (request: IRecipeRequest) => {
-    return `${GET_ENDPOINT}?q=chicken&app_id=${APP_ID}&app_key=${APP_KEY}`;
+    const maxSearchResults = request.maxResult
+      ? request.maxResult
+      : DEFAULT_Max_SEARCH_RESULT;
+    return `${GET_ENDPOINT}?q=${request.search}&app_id=${APP_ID}&app_key=${APP_KEY}&to=${maxSearchResults}`;
   };
 
   getTestRecipes = () => {
@@ -30,16 +34,20 @@ class RecipeApiClient implements IRecipeApi {
   };
 
   getRecipe = (request: IRecipeRequest) => {
-    return fetch(this.generateEndpoint(request)).then((response) => {
+    const endPoint = this.generateEndpoint(request);
+    return fetch(endPoint).then((response) => {
       if (!response.ok) throw new Error(response.statusText);
       return response.json();
     });
   };
   getRecipes = (request: IRecipeRequest, maxResult?: Number) => {
-    return fetch(this.generateEndpoint(request)).then((response) => {
+    const endPoint = this.generateEndpoint(request);
+    return fetch(endPoint).then((response) => {
       if (!response.ok) throw new Error(response.statusText);
+
       return response.json().then((data) => {
         if (!response.ok) throw new Error(response.statusText);
+
         return this.convertData(data);
       });
     });

@@ -59,7 +59,7 @@ const RecipeListElement: React.FC<RecipeListElementProps> = ({
       <CardActionArea
         className={classes.cardActionArea}
         onClick={() => {
-          window.location.href = authorLink;
+          window.open(authorLink);
         }}
       >
         <CardMedia image={image} className={classes.media} />
