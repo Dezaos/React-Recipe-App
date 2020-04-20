@@ -14,6 +14,7 @@ import { IRecipeRequest, RecipeRequestParams } from "../Types/IRecipeRequest";
 import RecipeApiClient from "../RestApis/RecipeApiClient";
 import ErrorSnackBar from "./ErrorSnackBar";
 import useQuery from "../Hooks/RouterQueryHook";
+import DetailedRecipe from "./DetailedRecipe";
 
 const NO_MATCHES_ERROR_MESSAGE = "No recipes matches this search!";
 const NO_MORE_API_CALLS_ERROR_MESSAGE =
@@ -76,8 +77,11 @@ const Body = () => {
           <RecipeSeacrh onSearch={onSearch} />
           <RecipeGrid recipes={recipes} />
         </Route>
+        <Route path="/detailed_recipe">
+          <DetailedRecipe />
+        </Route>
         <Route path="/">
-          <Redirect to="/search" />
+          <Redirect to="/detailed_recipe" />
         </Route>
       </Switch>
       <ErrorSnackBar
