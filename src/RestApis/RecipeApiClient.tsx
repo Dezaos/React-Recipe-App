@@ -1,5 +1,5 @@
 import IRecipeApi from "../Interfaces/IRecipeAPi";
-import IRecipeRequest from "../Types/IRecipeRequest";
+import { IRecipeRequest } from "../Types/IRecipeRequest";
 import testData from "../testData.json";
 import IRecipe from "../Types/IRecipe";
 import { SearchResult } from "./IEdamamRecipeData";
@@ -24,7 +24,7 @@ class RecipeApiClient implements IRecipeApi {
     const maxSearchResults = request.maxResult
       ? request.maxResult
       : DEFAULT_Max_SEARCH_RESULT;
-    return `${GET_ENDPOINT}?q=${request.search}&app_id=${APP_ID}&app_key=${APP_KEY}&to=${maxSearchResults}`;
+    return `${GET_ENDPOINT}?q=${request.query}&app_id=${APP_ID}&app_key=${APP_KEY}&to=${maxSearchResults}`;
   };
 
   getTestRecipes = () => {

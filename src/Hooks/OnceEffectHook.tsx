@@ -1,9 +1,9 @@
-import { EffectCallback, useEffect } from "react";
+import { EffectCallback, useEffect, useRef } from "react";
 
 const useOnceEffect = (effect: EffectCallback) => {
   useEffect(() => {
     effect();
-  }, [effect]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 };
 
 export default useOnceEffect;

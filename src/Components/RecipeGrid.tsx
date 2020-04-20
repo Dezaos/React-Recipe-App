@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import IRecipe from "../Types/IRecipe";
-import RecipeListElement from "./RecipeListElement";
+import RecipeListElement from "./RecipeElement";
 
 interface RecipeGridProps {
   recipes: IRecipe[];

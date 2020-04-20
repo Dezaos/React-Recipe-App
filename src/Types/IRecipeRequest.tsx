@@ -1,9 +1,11 @@
-import React from "react";
-
-interface IRecipeRequest {
-  search?: string;
-  ingredients?: string[];
-  maxResult?: Number;
+export interface IRecipeRequest {
+  query?: string | null;
+  ingredients?: string[] | null;
+  maxResult?: Number | null;
 }
 
-export default IRecipeRequest;
+export enum RecipeRequestParams {
+  Query = "query",
+  Ingredients = "ingredients",
+  MaxResult = "max_result",
+}

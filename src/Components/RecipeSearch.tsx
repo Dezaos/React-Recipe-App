@@ -1,21 +1,11 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import InputWithButtonForm from "./MaterialComponents/InputWithButtonForm";
-import { Card, makeStyles, IconButton } from "@material-ui/core";
-import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import IRecipe from "../Types/IRecipe";
-import RecipeApiClient from "../RestApis/RecipeApiClient";
-import Snackbar from "@material-ui/core/Snackbar";
-import CloseIcon from "@material-ui/icons/Close";
+import { Card, makeStyles } from "@material-ui/core";
+import { IRecipeRequest } from "../Types/IRecipeRequest";
 
 interface RecipeSeacrhProps {
-  onSearch: (value: IRecipe[]) => void;
+  onSearch: (value: IRecipeRequest) => void;
 }
-
-const NO_MATCHES_ERROR_MESSAGE = "No recipes matches this search!";
-const NO_MORE_API_CALLS_ERROR_MESSAGE =
-  "No more calls to API, please try again in a minute!";
-
-const ERROR_DISPLAY_STYLE = "flex";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 125,
   },
   errorBox: {
-    display: `${ERROR_DISPLAY_STYLE}`,
+    display: `flex`,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: theme.palette.error.main,
@@ -58,26 +48,6 @@ const useStyles = makeStyles((theme) => ({
 
 const RecipeSeacrh: React.FC<RecipeSeacrhProps> = ({ onSearch }) => {
   const classes = useStyles();
-  const [errorMessaage, setErrorMessage] = useState("");
-  const api = useRef(new RecipeApiClient());
-
-  const onRecipeSearch = (
-    event: React.FormEvent<HTMLFormElement>,
-    value: string
-  ): Promise<IRecipe[]> => {
-    event.preventDefault();
-
-    return api.current
-      .getRecipes({ search: value, maxResult: 100 })
-      .then((data) => {
-        setErrorMessage(data.length === 0 ? NO_MATCHES_ERROR_MESSAGE : "");
-        return data;
-      })
-      .catch((error) => {
-        setErrorMessage(NO_MORE_API_CALLS_ERROR_MESSAGE);
-        return [];
-      });
-  };
 
   return (
     <div className={classes.root}>
@@ -85,9 +55,9 @@ const RecipeSeacrh: React.FC<RecipeSeacrhProps> = ({ onSearch }) => {
         {" "}
         <InputWithButtonForm
           onSubmit={(event, value) => {
-            onRecipeSearch(event, value).then((data) => {
-              onSearch(data);
-            });
+            event.preventDefault();
+
+            if (value) onSearch({ query: value, maxResult: 100 });
           }}
           buttonIcon={<strong>Search</strong>}
           inputProps={{
@@ -99,28 +69,6 @@ const RecipeSeacrh: React.FC<RecipeSeacrhProps> = ({ onSearch }) => {
           }}
         />
       </Card>
-
-      <Snackbar
-        open={errorMessaage !== ""}
-        autoHideDuration={6000}
-        onClose={() => {
-          setErrorMessage("");
-        }}
-      >
-        <Card
-          className={classes.errorBox}
-          style={{ display: errorMessaage ? ERROR_DISPLAY_STYLE : "none" }}
-        >
-          <ErrorOutlineIcon className={classes.errorIcon} />
-          <strong className={classes.errorText}>{errorMessaage}</strong>
-          <IconButton
-            className={classes.errorCloseIcon}
-            onClick={() => setErrorMessage("")}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Card>
-      </Snackbar>
     </div>
   );
 };
