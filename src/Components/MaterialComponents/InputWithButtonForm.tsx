@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
-interface InputWithButtonFormProps {
+interface IInputWithButtonFormProps {
   onSubmit: (event: React.FormEvent<HTMLFormElement>, value: string) => void;
   buttonIcon?: JSX.Element;
   inputProps?: InputProps;
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   },
 });
 
-const InputWithButtonForm: React.FC<InputWithButtonFormProps> = ({
+const InputWithButtonForm: React.FC<IInputWithButtonFormProps> = ({
   onSubmit,
   buttonIcon,
   inputProps,

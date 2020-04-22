@@ -4,14 +4,14 @@ import "./index.css";
 import App from "./Components/App";
 import * as serviceWorker from "./serviceWorker";
 import { RootThemeProvider } from "./Contexts/RootThemeContext";
-import { RecipeProvier } from "./Contexts/RecipeContext";
+import { RecipeProvider } from "./Contexts/RecipeContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <RootThemeProvider>
-      <RecipeProvier>
+      <RecipeProvider>
         <App />
-      </RecipeProvier>
+      </RecipeProvider>
     </RootThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")

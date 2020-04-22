@@ -6,12 +6,13 @@ import {
   CardContent,
   CardActionArea,
 } from "@material-ui/core";
+import Routes from "../Enums/Routes";
+import { useHistory } from "react-router-dom";
+import RecipeRequestParams from "../Enums/RecipeRequestParams";
+import IRecipe from "../Interfaces/IRecipe";
 
-interface RecipeListElementProps {
-  image: string;
-  title: string;
-  author: string;
-  authorLink: string;
+interface IRecipeListElementProps {
+  recipe: IRecipe;
 }
 
 const useStyles = makeStyles({
@@ -46,26 +47,27 @@ const useStyles = makeStyles({
   },
 });
 
-const RecipeListElement: React.FC<RecipeListElementProps> = ({
-  image,
-  title,
-  author,
-  authorLink,
-}) => {
+const RecipeListElement: React.FC<IRecipeListElementProps> = ({ recipe }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Card className={classes.card}>
       <CardActionArea
         className={classes.cardActionArea}
         onClick={() => {
-          window.open(authorLink);
+          history.replace(
+            Routes.DetailedRecipe +
+              `?${RecipeRequestParams.RecipeId}=${encodeURIComponent(
+                recipe.id
+              )}`
+          );
         }}
       >
-        <CardMedia image={image} className={classes.media} />
+        <CardMedia image={recipe.image} className={classes.media} />
         <CardContent className={classes.cardContent}>
-          <strong className={classes.title}>{title}</strong>
-          <p className={classes.authorText}>By: {author}</p>
+          <strong className={classes.title}>{recipe.title}</strong>
+          <p className={classes.authorText}>By: {recipe.author}</p>
         </CardContent>
       </CardActionArea>
     </Card>

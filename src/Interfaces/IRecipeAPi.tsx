@@ -1,5 +1,5 @@
-import IRecipe from "../Types/IRecipe";
-import { IRecipeRequest } from "../Types/IRecipeRequest";
+import IRecipe from "./IRecipe";
+import IRecipeRequest from "./IRecipeRequest";
 
 interface IRecipeApi {
   getRecipe: (request: IRecipeRequest) => Promise<IRecipe>;

@@ -1,8 +1,9 @@
 import IRecipeApi from "../Interfaces/IRecipeAPi";
-import { IRecipeRequest } from "../Types/IRecipeRequest";
 import testData from "../testData.json";
-import IRecipe from "../Types/IRecipe";
-import { SearchResult } from "./IEdamamRecipeData";
+import IRecipe from "../Interfaces/IRecipe";
+import { SearchResult, Recipe } from "./IEdamamRecipeData";
+import IRecipeRequest from "../Interfaces/IRecipeRequest";
+import IIngredient from "../Interfaces/IIngredient";
 
 const GET_ENDPOINT = "https://api.edamam.com/search";
 const APP_ID = "377ebc8b";
@@ -11,20 +12,37 @@ const DEFAULT_Max_SEARCH_RESULT = 50;
 
 class RecipeApiClient implements IRecipeApi {
   convertData = (data: SearchResult): IRecipe[] => {
-    const mappedRecipes: IRecipe[] = data.hits.map(({ recipe }) => ({
+    if (!data || !data.hits) return [];
+
+    const mappedRecipes: IRecipe[] = data.hits.map(({ recipe }) =>
+      this.convertToRecipe(recipe)
+    );
+    return mappedRecipes;
+  };
+
+  convertToRecipe = (recipe: Recipe): IRecipe => {
+    return {
+      id: recipe.uri,
       author: recipe.source,
       authorLink: recipe.url,
       image: recipe.image,
       title: recipe.label,
-    }));
-    return mappedRecipes;
+      ingredians: recipe.ingredients
+        ? recipe.ingredients.map(
+            (i) => ({ name: i.text, quantity: `${i.weight} g` } as IIngredient)
+          )
+        : [],
+    } as IRecipe;
   };
 
   generateEndpoint = (request: IRecipeRequest) => {
+    const query = request.query ? `q=${request.query}&` : "";
+    const id = request.id ? `r=${encodeURIComponent(request.id)}` : "";
+
     const maxSearchResults = request.maxResult
       ? request.maxResult
       : DEFAULT_Max_SEARCH_RESULT;
-    return `${GET_ENDPOINT}?q=${request.query}&app_id=${APP_ID}&app_key=${APP_KEY}&to=${maxSearchResults}`;
+    return `${GET_ENDPOINT}?${query}${id}&app_id=${APP_ID}&app_key=${APP_KEY}&to=${maxSearchResults}`;
   };
 
   getTestRecipes = () => {
@@ -33,24 +51,33 @@ class RecipeApiClient implements IRecipeApi {
     });
   };
 
-  getRecipe = (request: IRecipeRequest) => {
-    const endPoint = this.generateEndpoint(request);
-    return fetch(endPoint).then((response) => {
-      if (!response.ok) throw new Error(response.statusText);
-      return response.json();
-    });
-  };
-  getRecipes = (request: IRecipeRequest, maxResult?: Number) => {
-    const endPoint = this.generateEndpoint(request);
+  private fetchRecipes = (endPoint: string) => {
     return fetch(endPoint).then((response) => {
       if (!response.ok) throw new Error(response.statusText);
 
       return response.json().then((data) => {
-        if (!response.ok) throw new Error(response.statusText);
-
         return this.convertData(data);
       });
     });
+  };
+
+  private fetchRecipe = (endPoint: string) => {
+    return fetch(endPoint).then((response) => {
+      if (!response.ok) throw new Error(response.statusText);
+
+      return response.json().then((data) => {
+        return this.convertToRecipe(data[0]);
+      });
+    });
+  };
+
+  getRecipe = (request: IRecipeRequest) => {
+    const endPoint = this.generateEndpoint(request);
+    return this.fetchRecipe(endPoint);
+  };
+  getRecipes = (request: IRecipeRequest) => {
+    const endPoint = this.generateEndpoint(request);
+    return this.fetchRecipes(endPoint);
   };
 }
 

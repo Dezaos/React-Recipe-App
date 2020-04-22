@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Switch, SwitchProps } from "@material-ui/core";
 import useFirstUpdateEffect from "../../Hooks/FirstUpdateEffectHook";
 
-interface Props extends SwitchProps {
+interface ITriggerSwitchProps extends SwitchProps {
   onFunction: () => void;
   offFunction: () => void;
   startValue: boolean;
@@ -18,7 +18,7 @@ const runCheckFunction = (
   else offFunction();
 };
 
-const TriggerSwitch: React.FC<Props> = ({
+const TriggerSwitch: React.FC<ITriggerSwitchProps> = ({
   onFunction,
   offFunction,
   startValue = false,

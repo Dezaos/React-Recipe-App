@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Checkbox, CheckboxProps } from "@material-ui/core";
 import useFirstUpdateEffect from "../../Hooks/FirstUpdateEffectHook";
 
-interface Props extends CheckboxProps {
+interface ITriggerCheckboxProps extends CheckboxProps {
   onFunction: () => void;
   offFunction: () => void;
   startValue?: boolean;
@@ -18,7 +18,7 @@ const runCheckFunction = (
   else offFunction();
 };
 
-const TriggerCheckBox: React.FC<Props> = ({
+const TriggerCheckBox: React.FC<ITriggerCheckboxProps> = ({
   onFunction,
   offFunction,
   startValue = false,

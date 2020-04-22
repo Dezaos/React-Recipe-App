@@ -3,7 +3,7 @@ import { Snackbar, Card, makeStyles, IconButton } from "@material-ui/core";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import CloseIcon from "@material-ui/icons/Close";
 
-interface ErrorSnackBarProps {
+interface IErrorSnackBarProps {
   message: string;
   show: boolean;
   onClose: () => void;
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ErrorSnackBar: React.FC<ErrorSnackBarProps> = ({
+const ErrorSnackBar: React.FC<IErrorSnackBarProps> = ({
   message,
   show,
   onClose,

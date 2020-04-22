@@ -1,9 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
-import IRecipe from "../Types/IRecipe";
+import IRecipe from "../Interfaces/IRecipe";
 import RecipeListElement from "./RecipeElement";
 
-interface RecipeGridProps {
+interface IRecipeGridProps {
   recipes: IRecipe[];
 }
 
@@ -19,19 +19,13 @@ const useStyles = makeStyles({
   },
 });
 
-const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes }) => {
+const RecipeGrid: React.FC<IRecipeGridProps> = ({ recipes }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.list}>
       {recipes.map((recipe) => (
-        <RecipeListElement
-          key={recipe.authorLink}
-          author={recipe.author}
-          authorLink={recipe.authorLink}
-          image={recipe.image}
-          title={recipe.title}
-        />
+        <RecipeListElement key={recipe.id} recipe={recipe} />
       ))}
     </div>
   );

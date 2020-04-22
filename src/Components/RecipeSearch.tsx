@@ -1,76 +1,81 @@
-import React from "react";
-import InputWithButtonForm from "./MaterialComponents/InputWithButtonForm";
-import { Card, makeStyles } from "@material-ui/core";
-import { IRecipeRequest } from "../Types/IRecipeRequest";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import RecipeSeacrhBar from "./RecipeSearchBar";
+import RecipeGrid from "./RecipeGrid";
+import { useHistory, useLocation } from "react-router-dom";
+import IRecipe from "../Interfaces/IRecipe";
+import RecipeApiClient from "../RestApis/RecipeApiClient";
+import ErrorSnackBar from "./ErrorSnackBar";
+import useQuery from "../Hooks/RouterQueryHook";
+import { makeStyles } from "@material-ui/core";
+import { useRecipeContext } from "../Contexts/RecipeContext";
+import IRecipeRequest from "../Interfaces/IRecipeRequest";
+import RecipeRequestParams from "../Enums/RecipeRequestParams";
 
-interface RecipeSeacrhProps {
-  onSearch: (value: IRecipeRequest) => void;
-}
+const NO_MATCHES_ERROR_MESSAGE = "No recipes matches this search!";
+const NO_MORE_API_CALLS_ERROR_MESSAGE =
+  "No more calls to API, please try again in a minute!";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
+    width: "100%",
   },
-  card: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    padding: 30,
-  },
-  input: {
-    flexBasis: "auto",
-  },
-  searchButton: {
-    minWidth: 125,
-  },
-  errorBox: {
-    display: `flex`,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: theme.palette.error.main,
-    marginTop: 5,
-    padding: "8px 16px",
-  },
-  errorText: {
-    marginLeft: 10,
-    color: "white",
-  },
-  errorIcon: {
-    color: "white",
-  },
-  errorCloseIcon: {
-    padding: 5,
-  },
-}));
+});
 
-const RecipeSeacrh: React.FC<RecipeSeacrhProps> = ({ onSearch }) => {
+const RecipeSearch: React.FC = ({}) => {
+  const history = useHistory();
+  const { currentRecipes, setCurrentRecipes } = useRecipeContext();
+  const api = useRef(new RecipeApiClient());
+  const [errorMessaage, setErrorMessage] = useState("");
+  const query = useQuery();
+  const location = useLocation();
   const classes = useStyles();
+
+  const searchForRecipes = useCallback(
+    (request: IRecipeRequest) => {
+      api.current
+        .getRecipes({ ...request, maxResult: 100 })
+        .then((data) => {
+          setErrorMessage(data.length === 0 ? NO_MATCHES_ERROR_MESSAGE : "");
+          if (!data || data.length === 0) return;
+
+          setCurrentRecipes(data);
+        })
+        .catch((error) => {
+          setErrorMessage(NO_MORE_API_CALLS_ERROR_MESSAGE);
+        });
+    },
+    [setCurrentRecipes, api]
+  );
+
+  const onSearch = (request: IRecipeRequest) => {
+    history.push(
+      location.pathname + `?${RecipeRequestParams.Query}=${request.query}`
+    );
+  };
+
+  const applyParams = useCallback(() => {
+    const queryParam = query.get(RecipeRequestParams.Query);
+    const ingredients = query.get(RecipeRequestParams.Ingredients)?.split(",");
+
+    if (queryParam || ingredients)
+      searchForRecipes({ query: queryParam, ingredients } as IRecipeRequest);
+  }, [query, searchForRecipes]);
+
+  useEffect(applyParams, [location.search]);
 
   return (
     <div className={classes.root}>
-      <Card elevation={5} className={classes.card}>
-        {" "}
-        <InputWithButtonForm
-          onSubmit={(event, value) => {
-            event.preventDefault();
-
-            if (value) onSearch({ query: value, maxResult: 100 });
-          }}
-          buttonIcon={<strong>Search</strong>}
-          inputProps={{
-            className: classes.input,
-            placeholder: "Recipe Search",
-          }}
-          buttonFormProps={{
-            className: classes.searchButton,
-          }}
-        />
-      </Card>
+      <RecipeSeacrhBar onSearch={onSearch} />
+      <RecipeGrid recipes={currentRecipes} />
+      <ErrorSnackBar
+        message={errorMessaage}
+        show={Boolean(errorMessaage)}
+        onClose={() => {
+          setErrorMessage("");
+        }}
+      />
     </div>
   );
 };
 
-export default RecipeSeacrh;
+export default RecipeSearch;
