@@ -11,7 +11,7 @@ const APP_KEY = "8df2e7244d7bc2590fcde4a21098e3b7";
 const DEFAULT_Max_SEARCH_RESULT = 50;
 
 class RecipeApiClient implements IRecipeApi {
-  convertData = (data: SearchResult): IRecipe[] => {
+  convertToRecipes = (data: SearchResult): IRecipe[] => {
     if (!data || !data.hits) return [];
 
     const mappedRecipes: IRecipe[] = data.hits.map(({ recipe }) =>
@@ -27,6 +27,9 @@ class RecipeApiClient implements IRecipeApi {
       authorLink: recipe.url,
       image: recipe.image,
       title: recipe.label,
+      calories: recipe.calories,
+      preparationTime: recipe.totalTime,
+      totalWeight: recipe.totalWeight,
       ingredians: recipe.ingredients
         ? recipe.ingredients.map(
             (i) => ({ name: i.text, quantity: `${i.weight} g` } as IIngredient)
@@ -47,7 +50,7 @@ class RecipeApiClient implements IRecipeApi {
 
   getTestRecipes = () => {
     return new Promise<any>((resolve, reject) => {
-      resolve(this.convertData(testData as SearchResult));
+      resolve(this.convertToRecipes(testData as SearchResult));
     });
   };
 
@@ -56,7 +59,7 @@ class RecipeApiClient implements IRecipeApi {
       if (!response.ok) throw new Error(response.statusText);
 
       return response.json().then((data) => {
-        return this.convertData(data);
+        return this.convertToRecipes(data);
       });
     });
   };

@@ -2,7 +2,6 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import RecipeSeacrhBar from "./RecipeSearchBar";
 import RecipeGrid from "./RecipeGrid";
 import { useHistory, useLocation } from "react-router-dom";
-import IRecipe from "../Interfaces/IRecipe";
 import RecipeApiClient from "../RestApis/RecipeApiClient";
 import ErrorSnackBar from "./ErrorSnackBar";
 import useQuery from "../Hooks/RouterQueryHook";
@@ -21,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-const RecipeSearch: React.FC = ({}) => {
+const RecipeSearch: React.FC = () => {
   const history = useHistory();
   const { currentRecipes, setCurrentRecipes } = useRecipeContext();
   const api = useRef(new RecipeApiClient());

@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import RecipeSearch from "./RecipeSearch";
 import Routes from "../Enums/Routes";
 import UrlToDetailedRecipe from "./UrlToDetailedRecipe";
+import InformationBox from "./InformationBox";
 
 const useStyles = makeStyles({
   body: {

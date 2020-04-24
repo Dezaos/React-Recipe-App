@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
 });
 
-const UrlToDetailedRecipe: React.FC = ({}) => {
+const UrlToDetailedRecipe: React.FC = () => {
   const classes = useStyles();
   const { cachedRecipes } = useRecipeContext();
   const query = useQuery();

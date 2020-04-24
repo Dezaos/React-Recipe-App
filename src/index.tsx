@@ -8,11 +8,9 @@ import { RecipeProvider } from "./Contexts/RecipeContext";
 
 ReactDOM.render(
   <React.StrictMode>
-    <RootThemeProvider>
-      <RecipeProvider>
-        <App />
-      </RecipeProvider>
-    </RootThemeProvider>
+    <RecipeProvider>
+      <App />
+    </RecipeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

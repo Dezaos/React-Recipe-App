@@ -9,6 +9,10 @@ interface IRecipe {
   author: string;
   authorLink: string;
   ingredians: IIngredient[];
+  calories?: Number;
+  totalWeight?: Number;
+  preparationTime?: Number;
+
   secondayInformation?: IStringPair[];
 }
 
