@@ -12,8 +12,8 @@ interface IRecipe {
   calories?: Number;
   totalWeight?: Number;
   preparationTime?: Number;
-
-  secondayInformation?: IStringPair[];
+  healthLabels?: string[];
+  cautions?: string[];
 }
 
 export default IRecipe;

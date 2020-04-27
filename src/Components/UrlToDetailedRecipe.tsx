@@ -6,7 +6,7 @@ import useOnceEffect from "../Hooks/OnceEffectHook";
 import IRecipe from "../Interfaces/IRecipe";
 import RecipeApiClient from "../RestApis/RecipeApiClient";
 import RecipeRequestParams from "../Enums/RecipeRequestParams";
-import DetailedRecipe from "./DetailedRecipe";
+import DetailedRecipe from "./DetailedRecipe/DetailedRecipe";
 
 const useStyles = makeStyles({
   root: {
@@ -41,7 +41,7 @@ const UrlToDetailedRecipe: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <DetailedRecipe recipe={recipe} />}
+      <DetailedRecipe recipe={recipe} />
     </div>
   );
 };

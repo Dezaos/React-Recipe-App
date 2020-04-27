@@ -1,10 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import RecipeSearch from "./RecipeSearch";
 import Routes from "../Enums/Routes";
 import UrlToDetailedRecipe from "./UrlToDetailedRecipe";
-import InformationBox from "./InformationBox";
+import TextFilterBox from "./TextFilterBox";
 
 const useStyles = makeStyles({
   body: {
@@ -27,7 +27,8 @@ const Body = () => {
           <UrlToDetailedRecipe />
         </Route>
         <Route path={Routes.Root}>
-          <Redirect to={Routes.Search} />
+          {/* <Redirect to={Routes.Search} /> */}
+          <TextFilterBox />
         </Route>
       </Switch>
     </main>

@@ -35,6 +35,8 @@ class RecipeApiClient implements IRecipeApi {
             (i) => ({ name: i.text, quantity: `${i.weight} g` } as IIngredient)
           )
         : [],
+      healthLabels: recipe.healthLabels,
+      cautions: recipe.cautions,
     } as IRecipe;
   };
 

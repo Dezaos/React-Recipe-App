@@ -46,19 +46,6 @@ export const RootThemeContext = React.createContext<RootThemeContextProps>({
   setDarkMode: () => {},
 });
 
-const getDarkMode = () => {
-  let result = true;
-  try {
-    const darkModeString = localStorage.getItem(DARK_MODE_LOCALSTORAGE_ID);
-    if (darkModeString) {
-      const storedDarkMode = JSON.parse(darkModeString) as boolean;
-      result = storedDarkMode;
-    }
-  } catch (error) {}
-
-  return result;
-};
-
 export const RootThemeProvider = ({ children }: Props<React.FC>) => {
   const [theme, setTheme] = useState(createTheme(true));
   const [darkMode, setDarkMode] = useState(true);
